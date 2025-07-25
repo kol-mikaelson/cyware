@@ -1,0 +1,28 @@
+# Compiled Go binaries
+*.exe
+*.exe~
+main
+app
+
+# Dependency directories
+# (Go modules stores them outside the project, but good to have)
+vendor/
+
+# Log files
+*.log
+
+# Environment variables file
+# IMPORTANT: Never commit your secrets!
+.env
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+# IDE/Editor folders
+.vscode/
+.idea/
+
+# Docker-related
+# This ignores the folder Docker Compose creates to store your database data
+postgres-data/
