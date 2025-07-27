@@ -23,8 +23,8 @@ services:
   db:
     image: postgres:14-alpine 
     environment:
-      - POSTGRES_USER=myuser
-      - POSTGRES_PASSWORD=mypassword
+      - POSTGRES_USER=zeno
+      - POSTGRES_PASSWORD="testuser"
       - POSTGRES_DB=stackoverflow_db
     ports:
       - "5432:5432"
