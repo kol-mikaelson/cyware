@@ -18,7 +18,7 @@ services:
       - POSTGRES_PASSWORD=mypassword
       - POSTGRES_DB=stackoverflow_db
       - POSTGRES_PORT=5432
-      - JWT_SECRET=your-super-secret-key 
+      - JWT_SECRET=KOL-MIKAELOV
 
   db:
     image: postgres:14-alpine 

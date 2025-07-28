@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS users (
 
 	router := gin.Default()
 	router.POST("/register",api.Register)
+	router.POST("/login",api.Login)
 	router.Run() // listen and serve on 0.0.0.0:8080
 }
 
