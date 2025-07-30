@@ -27,7 +27,7 @@ func main() {
 	authenticated.Use(auth.Middleware())
 	{
 		authenticated.POST("/questions", api.CreateQuestion)
-
+		authenticated.POST("/questions/:questionid/answer", api.CreateAnswer)
 	}
 
 	router.Run() // listen and serve on 0.0.0.0:8080

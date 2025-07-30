@@ -41,6 +41,19 @@ type QuestionResponse struct{
 	PostedAt time.Time
 	PostedBy string
 }
+
+type AnswerData struct{
+	Body string `json:"body" binding:"required"`
+}
+
+type AnswerResponse struct{
+	UUID string `json:"uuid"`
+	QuestionID string `json:"question_id"`
+	Body string `json:"body"`
+	PostedAt time.Time `json:"posted_at"`
+	PostedBy string `json:"posted_by"`
+}
+
 func Register(c *gin.Context){
 	var data user
 	if err := c.BindJSON(&data); err != nil {
@@ -133,5 +146,33 @@ func CreateQuestion(c *gin.Context){
         return
     }
     c.JSON(http.StatusCreated, quest)
+	
+}
+
+
+
+
+func CreateAnswer(c *gin.Context){
+	userID := c.GetString("userID")
+	Qid := c.Param("questionid")
+	var ad AnswerData
+	if err := c.BindJSON(&ad); err != nil{
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	answer := AnswerResponse{
+		QuestionID: Qid,
+		Body: ad.Body,
+		PostedBy: userID,
+		PostedAt: time.Now(),
+		UUID: uuid.NewString(),
+	}
+	sqlcomm := "INSERT INTO answers (id, user_id, body, created_at, question_id) VALUES ($1, $2, $3, $4, $5)"
+	_, err := database.Db.Exec(context.Background(), sqlcomm, answer.UUID, answer.PostedBy, answer.Body, answer.PostedAt, answer.QuestionID)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create answer"})
+        return
+    }
+    c.JSON(http.StatusCreated, answer)
 	
 }
