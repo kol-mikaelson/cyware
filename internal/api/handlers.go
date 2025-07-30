@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"time"
 	"github.com/gin-gonic/gin"
-	"github.com/jackc/pgx/v5" // Import pgx for the error type
+	"github.com/jackc/pgx/v5" 
 	"github.com/kol-mikaelson/cyware-go/internal/auth"
 	"github.com/kol-mikaelson/cyware-go/internal/database"
 	"github.com/google/uuid"
@@ -28,6 +28,19 @@ type LoginData struct {
 	Password string `json:"password" binding:"required"`
 }
 
+type QuestionData struct{
+	Title string `json:"title" binding:"required"`
+	Body string `json:"body" binding:"required"`
+	Category string `json:"category"`
+}
+
+type QuestionResponse struct{
+	UUID string
+	Title string
+	Body string
+	PostedAt time.Time
+	PostedBy string
+}
 func Register(c *gin.Context){
 	var data user
 	if err := c.BindJSON(&data); err != nil {
@@ -50,7 +63,6 @@ func Register(c *gin.Context){
          VALUES ($1, $2, $3, $4, $5)`
     _, err = database.Db.Exec(context.Background(), sql, newUser.ID, newUser.Username, newUser.Email, newUser.PasswordHash, newUser.CreatedAt)
     if err != nil {
-        // If the insert fails (e.g., duplicate email), send an error response.
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user"})
         return
     }
@@ -97,4 +109,29 @@ func Login(c *gin.Context){
 
     
     
+}
+
+func CreateQuestion(c *gin.Context){
+	userID := c.GetString("userID")
+	var qd QuestionData
+	if err := c.BindJSON(&qd); err != nil{
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	quest := QuestionResponse{
+		Title: qd.Title,
+		Body: qd.Body,
+		PostedBy: userID,
+		PostedAt: time.Now(),
+		UUID: uuid.NewString(),
+		
+	}
+	sqlcomm := "INSERT INTO questions (id, user_id, title, body, created_at) VALUES ($1, $2, $3, $4, $5)"
+	_, err := database.Db.Exec(context.Background(), sqlcomm, quest.UUID, quest.PostedBy, quest.Title, quest.Body, quest.PostedAt)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create question"})
+        return
+    }
+    c.JSON(http.StatusCreated, quest)
+	
 }
