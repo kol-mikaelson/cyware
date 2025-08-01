@@ -96,7 +96,7 @@ This project is fully containerized, so you only need Docker and Docker Compose 
 
 **Example Request:**
 ```bash
-curl -X POST http://localhost:8080/register \
+curl -X POST http://localhost:8080/api/users/register \
 -H "Content-Type: application/json" \
 -d '{
   "username": "testuser",
