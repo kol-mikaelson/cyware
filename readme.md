@@ -30,10 +30,13 @@ The database is designed to be relational and normalized, using foreign key cons
 * **`questions` Table:** Stores all questions.
     * `id (UUID, Primary Key)`: Unique identifier for the question.
     * `user_id (UUID, Foreign Key)`: Links to the `id` of the user who posted it. `ON DELETE CASCADE` ensures a user's questions are deleted if the user is.
+    * `body (VARCHAR, not null)`: The content of the question.
+
 * **`answers` Table:** Stores all answers.
     * `id (UUID, Primary Key)`: Unique identifier for the answer.
     * `question_id (UUID, Foreign Key)`: Links to the `id` of the question it answers.
     * `user_id (UUID, Foreign Key)`: Links to the `id` of the user who posted it.
+    * `body (VARCHAR, not null)`: The content of the answer.
 * **`votes` Table:** A polymorphic table to store votes for both questions and answers.
     * `user_id (UUID, Foreign Key)`: The user who voted.
     * `post_id (UUID)`: The ID of the question or answer being voted on.
