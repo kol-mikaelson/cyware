@@ -19,13 +19,16 @@ services:
       - POSTGRES_DB=stackoverflow_db
       - POSTGRES_PORT=5432
       - JWT_SECRET=KOL-MIKAELOV
+    env_file:
+      - .env
 
   db:
     image: postgres:14-alpine 
     environment:
-      - POSTGRES_USER=zeno
-      - POSTGRES_PASSWORD="testuser"
+      - POSTGRES_USER=myuser
+      - POSTGRES_PASSWORD="mypassword"
       - POSTGRES_DB=stackoverflow_db
+      - POSTGRES_HOST_AUTH_METHOD=trust 
     ports:
       - "5432:5432"
     volumes:
